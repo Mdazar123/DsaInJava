@@ -1,0 +1,60 @@
+mejority element
+class Solution {
+    public int majorityElement(int[] nums) {
+        int flag=0;
+        Map<Integer,Integer> mp=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            mp.putIfAbsent(nums[i], 0);
+        }
+        for(int i=0;i<nums.length;i++){
+            mp.put(nums[i], mp.getOrDefault(nums[i], 0) + 1);
+        }
+        for (Map.Entry<Integer, Integer> entry : mp.entrySet()) {
+            if(entry.getValue()>nums.length/2){
+                flag=entry.getKey();
+                break;
+            }
+        }
+        return flag;
+    }
+}
+
+class Solution {
+    public int findShortestSubArray(int[] nums) {
+        Map<Integer, Integer> countMap = new HashMap<>(); // To store frequency of each number
+        Map<Integer, Integer> firstMap = new HashMap<>(); // To store first occurrence index of each number
+        Map<Integer, Integer> lastMap = new HashMap<>();  // To store last occurrence index of each number
+
+        int degree = 0;
+        int minLength = nums.length; // Initialize min length with max possible length
+
+        // Traverse the array to populate the maps
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            // Count the occurrences of each number
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
+
+            // Store the first occurrence of the number
+            firstMap.putIfAbsent(num, i);
+
+            // Store the last occurrence of the number
+            lastMap.put(num, i);
+
+            // Update the degree of the array (max frequency)
+            degree = Math.max(degree, countMap.get(num));
+        }
+
+        // Now, find the shortest subarray for the number(s) with the max frequency (degree)
+        for (int num : countMap.keySet()) {
+            if (countMap.get(num) == degree) {
+                int first = firstMap.get(num);
+                int last = lastMap.get(num);
+                minLength = Math.min(minLength, last - first + 1);
+            }
+        }
+
+        // Return the length of the shortest subarray with the degree of the array
+        return minLength;
+    }
+}
